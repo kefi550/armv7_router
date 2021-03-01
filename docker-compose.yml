@@ -1,0 +1,34 @@
+version: '3'
+services:
+  unbound:
+    build: ./unbound
+    restart: always    
+    container_name: unbound
+    network_mode: host
+    ports:
+      - 53:53
+      - 53:53/udp
+    volumes:
+      - ./unbound/files/etc/unbound/unbound.conf:/unbound.conf
+      - ./unbound/files/etc/unbound/unbound.conf.d/:/unbound.conf.d
+  netdata:
+    image: netdata/netdata
+    restart: always    
+    container_name: netdata
+    network_mode: host
+    privileged: true
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - apparmor:unconfined
+    volumes:
+      - /proc:/proc:ro
+      - /sys:/sys:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+  nginx:
+    image: nginx
+    restart: always    
+    network_mode: host
+    container_name: nginx
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/nginx.conf
