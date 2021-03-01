@@ -1,1 +1,1 @@
-unbound/files/etc/unbound/unbound.conf.d/*
+unbound/files/etc/unbound/unbound.conf.d/*.conf
